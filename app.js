@@ -1,6 +1,6 @@
 const Discord = require('discord.js')
 const fs = require('fs')
-// require('dotenv').config()
+require('dotenv').config()
 
 const client = new Discord.Client()
 
@@ -23,6 +23,19 @@ client.once('ready', () => {
   console.log('kys-bot is ready!')
 })
 
+client.on('guildCreate', guild => {
+  dbConnection(guild.id)
+  let defaultChannel = ''
+  guild.channels.cache.forEach(channel => {
+    if (channel.type == 'text' && defaultChannel == '') {
+      if (channel.permissionsFor(guild.me).has("SEND_MESSAGES")) {
+        defaultChannel = channel
+      }
+    }
+  })
+  defaultChannel.send('Дарова!')
+})
+
 client.on('message', async msg => {
   if (msg.author.bot) return
 
@@ -30,15 +43,16 @@ client.on('message', async msg => {
   const command = args.shift().toLowerCase()
   const commands = commandHandler()
 
-  const db = dbConnection()
+  const db = dbConnection(msg.guild.id)
 
- db.get('SELECT * FROM users WHERE username=?', [msg.author.tag], (err, row) => {
+ db.get('SELECT * FROM users WHERE username=?', [msg.author.tag], (err, row) => { //Add new user to DB
     if (err) throw err
     if (row == undefined) {
-      db.run('INSERT INTO users(user_id, username, user_joinedTimestamp) VALUES (?, ?, ?)', 
+      db.run('INSERT INTO users(user_id, username, user_avatarURL, user_joinedTimestamp) VALUES (?, ?, ?, ?)', 
         [
           msg.guild.member(msg.author.id).user.id, 
           msg.author.tag, 
+          msg.author.displayAvatarURL(),
           msg.guild.member(msg.author.id).joinedTimestamp
         ])
     } else {
