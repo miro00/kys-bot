@@ -13,7 +13,7 @@ function dbConnection(dbname) {
       user_level integer DEFAULT 1,
       user_status text,
       user_joinedTimestamp integer,
-      user_conscience integer DEFAULT 0
+      user_rating integer DEFAULT 0
       )`)
   })
   return db
