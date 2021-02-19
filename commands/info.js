@@ -32,9 +32,15 @@ module.exports = {
           avatar = await loadImage(avatar)
 
           let iconHouse = await loadImage('./icons/mdi_home.png'),
-            iconSmile = await loadImage('./icons/mdi_emoticon-happy.png'),
             iconTrophy = await loadImage('./icons/mdi_trophy-variant.png'),
-            iconMessage = await loadImage('./icons/mdi_message-text.png')
+            iconMessage = await loadImage('./icons/mdi_message-text.png'),
+            iconSmile = await loadImage('./icons/mdi_emoticon-neutral.png')
+
+          if (row.user_rating === 0) iconSmile = await loadImage('./icons/mdi_emoticon-neutral.png')
+          else if (row.user_rating > 0 && row.user_rating < 25) iconSmile = await loadImage('./icons/mdi_emoticon-happy.png')
+          else if (row.user_rating >= 25) iconSmile = await loadImage('./icons/mdi_emoticon-excited.png')
+          else if (row.user_rating < 0 && row.user_rating > -25) iconSmile = await loadImage('./icons/mdi_emoticon-sad.png')
+          else if (row.user_rating <= -25) iconSmile = await loadImage('./icons/mdi_emoticon-devil.png')
 
           let nextLevel = 500 * (Math.pow(2, row.user_level) - 1)
           let progress = Math.round(100 / (nextLevel / row.user_xp) * 280 / 100)
@@ -67,8 +73,7 @@ module.exports = {
             .printText(`LVL ${row.user_level}`, userInfoX + 25, 95)
             // Rating
             .printImage(iconSmile, 295, 56)
-            // .printText(`REP ${row.user_rating}`, 295 + 25, 71)
-            .printText(`REP (test)`, 295 + 25, 71)
+            .printText(`REP ${row.user_rating}`, 295 + 25, 71)
             // Days on server
             .printImage(iconHouse, 295, 80)
             .printText(`DAYS ${daysOnServer}`, 295 + 25, 95)

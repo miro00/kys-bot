@@ -42,7 +42,6 @@ client.on('message', async msg => {
   const args = msg.content.slice(prefix.length).split(/ +/)
   const command = args.shift().toLowerCase()
   const commands = commandHandler()
-
   if (msg.content.startsWith(prefix)) {
     if (commands.find(cmd => cmd.name === command)) {
       commands.get(command).execute(msg, args)
@@ -68,12 +67,14 @@ client.on('message', async msg => {
   db.get('SELECT * FROM users WHERE username=?', [msg.author.tag], (err, row) => { //Add new user to DB
      if (err) throw err
      if (row == undefined) {
-       db.run('INSERT INTO users(user_id, username, user_avatarURL, user_joinedTimestamp) VALUES (?, ?, ?, ?)', 
+       let today = new Date()
+       db.run('INSERT INTO users(user_id, username, user_avatarURL, user_joinedTimestamp, user_ratingDate) VALUES (?, ?, ?, ?, ?)', 
          [
-           msg.guild.member(msg.author.id).user.id, 
-           msg.author.tag, 
-           msg.author.displayAvatarURL(),
-           msg.guild.member(msg.author.id).joinedTimestamp
+          msg.guild.member(msg.author.id).user.id, 
+          msg.author.tag, 
+          msg.author.displayAvatarURL(),
+          msg.guild.member(msg.author.id).joinedTimestamp,
+          String(today)
          ])
      } else {
        let userMessages = row.user_messages

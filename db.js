@@ -5,7 +5,7 @@ function dbConnection(dbname) {
   db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS users(
       id integer PRIMARY KEY AUTOINCREMENT, 
-      user_id integer,
+      user_id text,
       username text,
       user_avatarURL text, 
       user_messages integer DEFAULT 0, 
@@ -13,7 +13,8 @@ function dbConnection(dbname) {
       user_level integer DEFAULT 1,
       user_status text,
       user_joinedTimestamp integer,
-      user_rating integer DEFAULT 0
+      user_rating integer DEFAULT 0,
+      user_ratingDate text
       )`)
   })
   return db
