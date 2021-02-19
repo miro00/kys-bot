@@ -22,7 +22,7 @@ module.exports = {
         if (!/\<\@\!\d{18}\>/g.test(args[1])) return msg.channel.send('Укажите пользователя через @')
           
         let userID = args[1].replace(/[\<\>\@\!]/g, '')
-        db.get('SELECT user_rating FROM users WHERE user_id=?', [userID], (err, row) => {
+        db.get('SELECT user_rating, username FROM users WHERE user_id=?', [userID], (err, row) => {
           if (err) throw err
           if (row === undefined) return msg.channel.send('Пользователь не найден в базе :(')
 
@@ -30,8 +30,10 @@ module.exports = {
           let rating = row.user_rating
           if (ratingUp) {
             rating++
+            msg.channel.send(`Вы увеличили рейтинг пользователя ${row.username}`)
           } else {
             rating--
+            msg.channel.send(`Вы уменьшили рейтинг пользователя ${row.username}`)
           }
           db.run('UPDATE users SET user_rating=? WHERE user_id=?', [rating ,userID])
           
