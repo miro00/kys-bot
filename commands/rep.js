@@ -19,9 +19,12 @@ module.exports = {
       } else {
         if (args.length === 0) return msg.channel.send('Команда должна быть представлена в виде: \n```>rep up/down @имя_пользователя```')
         if (args[0] !== 'up' && args[0] !== 'down') return msg.channel.send('Необходимо указать "up" либо "down"!')
-        if (!/\<\@\!\d{18}\>/g.test(args[1])) return msg.channel.send('Укажите пользователя через @')
-          
+        if (!/\<\@(|\!)\d{18}\>/g.test(args[1])) return msg.channel.send('Укажите пользователя через @')
+        
         let userID = args[1].replace(/[\<\>\@\!]/g, '')
+
+        if (userID === msg.author.id) return msg.channel.send('Самый умный да?')
+          
         db.get('SELECT user_rating, username FROM users WHERE user_id=?', [userID], (err, row) => {
           if (err) throw err
           if (row === undefined) return msg.channel.send('Пользователь не найден в базе :(')

@@ -19,7 +19,7 @@ function commandHandler() {
 }
 
 client.once('ready', () => {
-  client.user.setActivity(`${prefix}help`, {type: 'WATCHING'})
+  client.user.setActivity(`фильмы для взрослых`, {type: 'WATCHING'})
   console.log('kys-bot is ready!')
 })
 
@@ -118,8 +118,6 @@ client.on('message', async msg => {
         }
        }
 
-      
- 
        db.run('UPDATE users SET user_messages=?, user_xp=?, user_level=? WHERE username=?', 
        [userMessages, userXP, userLevel, msg.author.tag])
      }
