@@ -1,6 +1,6 @@
 const dbConnection = require('../db')
 
-module.exports = (Discord, client, msg) => {
+module.exports = async (Discord, client, msg) => {
   if (msg.author.bot) return
 
   const prefix = '>'
@@ -83,8 +83,8 @@ module.exports = (Discord, client, msg) => {
         }
        }
 
-       db.run('UPDATE users SET user_messages=?, user_xp=?, user_level=? WHERE username=?', 
-       [userMessages, userXP, userLevel, msg.author.tag])
+       db.run('UPDATE users SET user_avatarURL=?, user_messages=?, user_xp=?, user_level=? WHERE username=?', 
+       [msg.author.displayAvatarURL(), userMessages, userXP, userLevel, msg.author.tag])
      }
    })
    db.close()

@@ -91,7 +91,7 @@ module.exports = {
             .toBuffer();
           
           const attachment = new Discord.MessageAttachment(result)
-          msg.channel.send(attachment)
+          await msg.channel.send(attachment)
         } else {
           msg.channel.send('Нет информации об этом пользователе ☹')
         }
