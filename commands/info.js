@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const { Canvas } = require('canvas-constructor')
 const { loadImage, registerFont } = require('canvas')
 const fetch = require('node-fetch')
-const path = require('path')
+const getUserFromMention = require('../functions/getUserFromMention')
 
 module.exports = {
   name: 'info',
@@ -12,8 +12,8 @@ module.exports = {
     if (args.length === 0) {
       args = msg.guild.member(msg.author.id).user.id
     } else {
-      if (/\<\@\!\d{18}\>/g.test(args[0])) {
-        args = args[0].replace(/[\<\>\@\!]/g, '')
+      if (/\<\@(|\!)\d{18}\>/g.test(args[0])) {
+        args = getUserFromMention(args[0])
       } else {
         msg.channel.send('Укажите пользователя через @')
       }
@@ -82,7 +82,7 @@ module.exports = {
             .printRoundedRectangle(userInfoX, progressBarY, progressBarW, progressBarH, 10)
             .setColor('#6737ED')
             .printRoundedRectangle(userInfoX, progressBarY, progress, progressBarH, 10)
-            // Progress bar text
+            // XP
             .setColor('#202020')
             .setTextAlign('center')
             .setTextFont(`${progressTextSize}px Montserrat-Bold`)
