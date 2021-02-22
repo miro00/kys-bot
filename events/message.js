@@ -1,4 +1,5 @@
 const dbConnection = require('../db')
+const fs = require('fs')
 
 module.exports = async (Discord, client, msg) => {
   if (msg.author.bot) return
@@ -27,7 +28,6 @@ module.exports = async (Discord, client, msg) => {
       msg.channel.send('Такой команды не существует 😔')
     }
   }
-
   const db = dbConnection(msg.guild.id)
   db.get('SELECT * FROM users WHERE username=?', [msg.author.tag], (err, row) => { //Add new user to DB
      if (err) throw err
@@ -55,36 +55,17 @@ module.exports = async (Discord, client, msg) => {
        if (nextLevel <= userXP) {
          userLevel++
 
-         if (msg.guild.id === '590518933803761675') { // OMYT
-          switch (userLevel) {
-            case 10: 
-              msg.guild.member(msg.author).roles.add('812042084272832563')
-              msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня! И получил роль <@&812042084272832563>`)
-              break;
-            case 25: 
-              msg.guild.member(msg.author).roles.remove('812042084272832563')
-              msg.guild.member(msg.author).roles.add('812042369737687061')
-              msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня! И получил роль <@&812042369737687061>`)
-              break;
-            default:
-              msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня!`)
-          } 
-        } else if (msg.guild.id === '719616597718990851') { // Suicide
-          switch (userLevel) {
-            case 10:
-              msg.guild.member(msg.author).roles.add('812049276179972157')
-              msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня! И получил роль <@&812049276179972157>`)
-              break;
-            default:
-              msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня!`)
-          }
+        if (fs.existsSync(`./events/local/${msg.guild.id}`)) {
+          require(`../events/local/${msg.guild.id}/leveling`)(msg, userLevel)
         } else {
-         msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня!`)
+          msg.channel.send(`<@${msg.author.id}> достиг ${userLevel} уровня!`)
         }
        }
+       
 
        db.run('UPDATE users SET user_avatarURL=?, user_messages=?, user_xp=?, user_level=? WHERE username=?', 
        [msg.author.displayAvatarURL(), userMessages, userXP, userLevel, msg.author.tag])
+
      }
    })
    db.close()
