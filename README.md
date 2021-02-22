@@ -1,6 +1,4 @@
-# kys-bot
-
-![]('./assets/cerber.png')
+# kys-bot ![cerber](./assets/cerber.png)
 
 🤖 **kys-bot** - Discord бот, умеющий все и одновременно ничего. 
 
