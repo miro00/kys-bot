@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'извинись',
-  description: 'Извиняется',
+  name: "извинись",
+  description: "Извиняется",
   async execute(msg, args) {
-    msg.reply('извините :pleading_face:')
-  }
-}
+    msg.reply("извините :pleading_face:");
+  },
+};

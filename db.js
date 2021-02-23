@@ -8,7 +8,7 @@ function dbConnection(dbname) {
       user_id text,
       username text,
       user_avatarURL text, 
-      user_messages integer DEFAULT 0, 
+      user_messages integer DEFAULT 1, 
       user_xp integer DEFAULT 0,
       user_level integer DEFAULT 1,
       user_status text,
