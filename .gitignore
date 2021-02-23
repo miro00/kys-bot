@@ -1,4 +1,4 @@
 node_modules
 .env
-databases
+databases/*
 todo.md
