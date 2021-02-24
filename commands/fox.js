@@ -3,6 +3,7 @@ const axios = require("axios").default;
 
 module.exports = {
   name: "fox",
+  aliases: ["лиса", "лисичка"],
   description: "Send random fox pic 🦊",
   async execute(msg, args) {
     await axios

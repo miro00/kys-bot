@@ -2,6 +2,7 @@ const dbConnection = require("../db");
 
 module.exports = {
   name: "rep",
+  aliases: ["reputation", "r"],
   description: "rep down - отнять репутацию, rep up - добавить",
   execute(msg, args) {
     const db = dbConnection(msg.guild.id);
