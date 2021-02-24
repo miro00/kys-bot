@@ -4,6 +4,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = {
   name: "score",
   aliases: ["leaders"],
+  cooldown: 0,
   description: "Leaderboard",
   async execute(msg, args) {
     const db = dbConnection(msg.guild.id);

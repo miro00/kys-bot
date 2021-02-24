@@ -8,6 +8,7 @@ const getUserFromMention = require("../functions/getUserFromMention");
 module.exports = {
   name: "info",
   aliases: ["i"],
+  cooldown: 0,
   description: "User info",
   async execute(msg, args) {
     if (args.length === 0) {

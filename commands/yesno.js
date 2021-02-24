@@ -1,6 +1,7 @@
 module.exports = {
   name: "yesno",
   aliases: ["данет"],
+  cooldown: 0,
   description: "Да? Нет?",
   async execute(msg, args) {
     if (!args.length) return msg.channel.send("Че хотел спросить?");
