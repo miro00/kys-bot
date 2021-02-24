@@ -3,27 +3,18 @@ const fs = require("fs");
 
 module.exports = async (Discord, client, msg) => {
   if (msg.author.bot) return;
-
   const prefix = ">";
+
+  if (!msg.content.startsWith(prefix)) return;
+
   const args = msg.content.slice(prefix.length).split(/ +/);
-  const command = args.shift().toLowerCase();
+  const cmd = args.shift().toLowerCase();
   const commands = require("../commandHandler")(client, Discord);
-  if (msg.content.startsWith(prefix)) {
-    if (commands.find((cmd) => cmd.name === command)) {
-      commands.get(command).execute(msg, args);
-    } else if (command === "help") {
-      const embed = new Discord.MessageEmbed()
-        .setColor("#E20023")
-        .setThumbnail("https://i.imgur.com/8ySqBJS.png")
-        .setTitle("Help");
-      commands.forEach((cmd) => {
-        embed.addField(`${prefix}${cmd.name}`, `${cmd.description}`, true);
-      });
-      msg.channel.send(embed);
-    } else {
-      msg.channel.send("Такой команды не существует 😔");
-    }
-  }
+  const command =
+    commands.get(cmd) ||
+    commands.find((a) => a.aliases && a.aliases.includes(cmd));
+  if (command) command.execute(msg, args);
+
   const db = dbConnection(msg.guild.id);
   db.get(
     "SELECT * FROM users WHERE username=?",
