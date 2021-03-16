@@ -38,9 +38,10 @@ module.exports = {
             url: video.url,
           };
         } else {
-          msg.channel.send("Видео не найдено");
+          return msg.channel.send("Видео не найдено");
         }
       }
+
       if (!serverQueue) {
         const queueConstructor = {
           voice_channel: voiceChannel,

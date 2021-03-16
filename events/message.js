@@ -36,7 +36,8 @@ module.exports = async (Discord, client, msg) => {
 
     timeStamps.set(msg.author.id, currentTime)
 
-    if (command) command.execute(msg, args, cmd);
+    if (command) command.execute(msg, args, cmd) 
+    
 
 
   const db = dbConnection(msg.guild.id);
