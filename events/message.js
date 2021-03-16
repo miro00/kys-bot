@@ -1,6 +1,8 @@
 const dbConnection = require("../db");
 const fs = require("fs");
 
+const cooldowns = new Map()
+
 module.exports = async (Discord, client, msg) => {
   if (msg.author.bot) return;
   const prefix = ">";
@@ -13,7 +15,30 @@ module.exports = async (Discord, client, msg) => {
   const command =
     commands.get(cmd) ||
     commands.find((a) => a.aliases && a.aliases.includes(cmd));
-  if (command) command.execute(msg, args);
+  
+    if (!cooldowns.has(command.name)) {
+      cooldowns.set(command.name, new Discord.Collection())
+    }
+  
+    const currentTime = Date.now()
+    const timeStamps = cooldowns.get(command.name)
+    const cooldownAmount = (command.cooldown) * 1000
+
+    if (timeStamps.has(msg.author.id)) {
+      const expirationTime = timeStamps.get(msg.author.id) + cooldownAmount
+
+      if (currentTime < expirationTime) {
+        const timeLeft = (expirationTime - currentTime) / 1000
+
+        return msg.reply(`Падажи, попробуй через ${timeLeft.toFixed(1)} секунд`)
+      }
+    }
+
+    timeStamps.set(msg.author.id, currentTime)
+
+    if (command) command.execute(msg, args, cmd) 
+    
+
 
   const db = dbConnection(msg.guild.id);
   db.get(
